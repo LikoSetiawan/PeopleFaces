@@ -8,14 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var viewModel = ViewModel()
+    @State private var addPhotoModal = false
+    
+    
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack{
+            List(viewModel.peoples, id: \.self){ people in
+                HStack{
+                    Text(people.name)
+                }
+                
+            }
+            .navigationTitle("People Faces")
+            .toolbar{
+                Button("Add People"){
+                    addPhotoModal.toggle()
+                }
+            }
+            .sheet(isPresented: $addPhotoModal){
+                AddPeopleView()
+            }
         }
-        .padding()
     }
 }
 
