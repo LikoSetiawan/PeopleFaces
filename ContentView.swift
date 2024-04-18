@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    //contentview-viewmodel
     @State private var viewModel = ViewModel()
-    @State private var addPhotoModal = false
-    
-    
     
     var body: some View {
         NavigationStack{
-            List(viewModel.peoples, id: \.self){ people in
+            List(viewModel.peoples){ people in
                 HStack{
                     Text(people.name)
                 }
@@ -24,15 +22,18 @@ struct ContentView: View {
             .navigationTitle("People Faces")
             .toolbar{
                 Button("Add People"){
-                    addPhotoModal.toggle()
+                    viewModel.addPhotoModal.toggle()
                 }
             }
-            .sheet(isPresented: $addPhotoModal){
-                AddPeopleView()
+            .sheet(isPresented: $viewModel.addPhotoModal) {
+                AddPeopleView(people: viewModel.peoples)
             }
+            
         }
     }
 }
+
+
 
 #Preview {
     ContentView()

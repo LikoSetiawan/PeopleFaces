@@ -8,9 +8,12 @@
 import Foundation
 
 
-struct People: Codable, Hashable {
+struct People: Codable, Hashable, Identifiable {
+    var id: UUID
     var name: String
     var image: Data
     
-    static let example = People(name: "titit12", image: Data("sampleImageData".utf8))
+    #if DEBUG
+    static let example = People(id: UUID(), name: "titit12", image: Data("sampleImageData".utf8))
+    #endif
 }

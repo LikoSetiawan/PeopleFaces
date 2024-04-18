@@ -13,31 +13,32 @@ struct AddPeopleView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedImage: PhotosPickerItem?
-    @State private var processedImage: Image?
+    //addpeople-viewmodel
+    @State private var viewModel: ViewModel
 
-    @State private var name = ""
-//    var people: People
+
     
     var body: some View {
         NavigationStack{
             VStack{
                 Spacer()
                 PhotosPicker(selection: $selectedImage){
-                    if let processedImage {
-                        
-                        processedImage
+                    if let processedImage = viewModel.processedImage {
+                        Image(uiImage: processedImage)
                             .resizable()
                             .scaledToFit()
                     } else {
                         ContentUnavailableView("No Picture", systemImage: "photo.badge.plus", description: Text("Tap to import a photo"))
                     }
                 }
-                .onChange(of: selectedImage, loadImage)
+                .onChange(of: selectedImage){ 
+                    viewModel.loadImage(selectedImage: selectedImage)
+                }
                 .buttonStyle(.plain)
                 
                 Spacer()
             
-                TextField("Name the people", text: $name)
+                TextField("Name the people", text: $viewModel.name)
                     .padding()
                     .background(Color.white) // Set background color
                     .overlay(
@@ -52,7 +53,8 @@ struct AddPeopleView: View {
             .padding([.horizontal, .bottom])
             .toolbar{
                 Button("Save People"){
-                    //
+                    viewModel.addPeople()
+                    viewModel.savePeople()
                     dismiss()
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
@@ -61,43 +63,15 @@ struct AddPeopleView: View {
             }
         }
     }
-    func loadImage(){
-        Task{
-            guard let imageData = try await selectedImage?.loadTransferable(type: Data.self) else { return }
-            
-            guard let inputImage = UIImage(data: imageData) else { return }
-            
-            processedImage = Image(uiImage: inputImage)
 
-            
-            
-        }
+    init(people: People){
+        _viewModel = State(initialValue: ViewModel(people: people))
     }
-    
-    func savePeople() {
-        if let imageData = selectedImage?.loadTransferable(type: Data.self){
-            
-        }
-        
-        guard let inputImage = UIImage(data: imageData) else { return }
-        //usedocumentdirectory here's the reference code
-//        Button("Read and Write") {
-//            let data = Data("Test Message".utf8)
-//            let url = URL.documentsDirectory.appending(path: "message.txt")
-//
-//            do {
-//                try data.write(to: url, options: [.atomic, .completeFileProtection])
-//                let input = try String(contentsOf: url)
-//                print(input)
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-    }
+  
     
 }
 
 #Preview {
-    AddPeopleView()
+    AddPeopleView(people: .example)
 }
 

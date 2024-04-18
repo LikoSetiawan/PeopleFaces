@@ -12,7 +12,20 @@ import PhotosUI
 extension ContentView{
     @Observable
     class ViewModel{
-        var peoples = [People]()
+        private(set) var peoples: [People]
+        var addPhotoModal = false
+        
+        
+        let savePath = URL.documentsDirectory.appending(path: "People")
+        
+        init(){
+            do{
+                let data = try Data(contentsOf: savePath)
+                peoples = try JSONDecoder().decode([People].self, from: data)
+            } catch{
+                peoples = []
+            }
+        }
         
         
     }
