@@ -7,6 +7,7 @@
 
 import CoreImage
 import Foundation
+import SwiftUI  
 import PhotosUI
 
 extension ContentView{
@@ -15,6 +16,7 @@ extension ContentView{
         private(set) var peoples: [People]
         var addPhotoModal = false
         
+        var processedImage: UIImage?
         
         let savePath = URL.documentsDirectory.appending(path: "People")
         
@@ -27,6 +29,35 @@ extension ContentView{
             }
         }
         
+        func savePeople() {
+            do{
+                let data = try JSONEncoder().encode(peoples)
+                try data.write(to: savePath, options: [.atomic, .completeFileProtection])
+                print("People data saved successfully.")
+            } catch {
+                print("Unable to save data")
+            }
+        }
+        
+        func addPeople(name: String){
+            if let imageData = processedImage?.jpegData(compressionQuality: 0.8){
+                let addNewPeople = People(id: UUID(), name: name, image: imageData)
+                peoples.append(addNewPeople)
+                savePeople()
+                print("New person added successfully.")
+            }
+        }
+        
+        func loadImage(selectedImage: PhotosPickerItem?){
+            Task{
+                guard let imageData = try await selectedImage?.loadTransferable(type: Data.self) else { return }
+                
+                guard let inputImage = UIImage(data: imageData) else { return }
+                
+                processedImage = inputImage
+
+            }
+        }
         
     }
 }

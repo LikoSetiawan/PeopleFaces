@@ -14,6 +14,6 @@ struct People: Codable, Hashable, Identifiable {
     var image: Data
     
     #if DEBUG
-    static let example = People(id: UUID(), name: "titit12", image: Data("sampleImageData".utf8))
+    static let example = People(id: UUID(), name: "titit12", image: Data("Joji".utf8))
     #endif
 }

@@ -14,8 +14,11 @@ struct AddPeopleView: View {
     
     @State private var selectedImage: PhotosPickerItem?
     //addpeople-viewmodel
-    @State private var viewModel: ViewModel
-
+//    @State private var viewModel = ViewModel()
+    @State private var processedImage: UIImage?
+    @State private var name = ""
+    
+    var viewModel: ContentView.ViewModel
 
     
     var body: some View {
@@ -38,7 +41,7 @@ struct AddPeopleView: View {
                 
                 Spacer()
             
-                TextField("Name the people", text: $viewModel.name)
+                TextField("Name the people", text: $name)
                     .padding()
                     .background(Color.white) // Set background color
                     .overlay(
@@ -53,8 +56,8 @@ struct AddPeopleView: View {
             .padding([.horizontal, .bottom])
             .toolbar{
                 Button("Save People"){
-                    viewModel.addPeople()
-                    viewModel.savePeople()
+                    viewModel.addPeople(name: name)
+                
                     dismiss()
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
@@ -64,14 +67,11 @@ struct AddPeopleView: View {
         }
     }
 
-    init(people: People){
-        _viewModel = State(initialValue: ViewModel(people: people))
-    }
-  
+
     
 }
 
 #Preview {
-    AddPeopleView(people: .example)
+    AddPeopleView(viewModel: ContentView.ViewModel())
 }
 
