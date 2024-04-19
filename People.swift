@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct People: Codable, Hashable, Identifiable {
+struct People: Codable, Hashable, Identifiable, Equatable {
     var id: UUID
     var name: String
     var image: Data
