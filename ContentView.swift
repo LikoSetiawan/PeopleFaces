@@ -17,7 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack{
-            List(viewModel.peoples){ people in
+            List(viewModel.peoples.sorted()){ people in
                 NavigationLink(value: people){
                     HStack{
                         if people.image != nil {
