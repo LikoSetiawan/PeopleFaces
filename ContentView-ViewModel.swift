@@ -6,8 +6,10 @@
 //
 
 import CoreImage
+import CoreLocation
 import Foundation
-import SwiftUI  
+import MapKit
+import SwiftUI
 import PhotosUI
 
 extension ContentView{
@@ -39,9 +41,9 @@ extension ContentView{
             }
         }
         
-        func addPeople(name: String){
+        func addPeople(name: String, point: CLLocationCoordinate2D ){
             if let imageData = processedImage?.jpegData(compressionQuality: 0.8){
-                let addNewPeople = People(id: UUID(), name: name, image: imageData)
+                let addNewPeople = People(id: UUID(), name: name, image: imageData, latitude: point.latitude, longitude: point.longitude)
                 peoples.append(addNewPeople)
                 savePeople()
                 print("New person added successfully.")

@@ -17,7 +17,7 @@ struct AddPeopleView: View {
 //    @State private var viewModel = ViewModel()
     @State private var processedImage: UIImage?
     @State private var name = ""
-    
+    let locationFetcher = LocationFetcher()
     var viewModel: ContentView.ViewModel
 
     
@@ -52,11 +52,20 @@ struct AddPeopleView: View {
                     .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
                     .frame(width: 370)
             }
+            .onAppear{
+                locationFetcher.start()
+            }
             .navigationTitle("Add People Faces")
             .padding([.horizontal, .bottom])
             .toolbar{
                 Button("Save People"){
-                    viewModel.addPeople(name: name)
+                    if let location = locationFetcher.lastKnownLocation {
+                        print("Your location is \(location)")
+                    } else {
+                        print("Your location is unknown")
+                    }
+                    viewModel.addPeople(name: name, point: locationFetcher.lastKnownLocation!)
+                    
                 
                     dismiss()
                 }
