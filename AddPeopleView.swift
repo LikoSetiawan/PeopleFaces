@@ -13,9 +13,8 @@ struct AddPeopleView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedImage: PhotosPickerItem?
-    //addpeople-viewmodel
-//    @State private var viewModel = ViewModel()
-    @State private var processedImage: UIImage?
+
+//    @State private var processedImage: UIImage
     @State private var name = ""
     let locationFetcher = LocationFetcher()
     var viewModel: ContentView.ViewModel
@@ -65,8 +64,8 @@ struct AddPeopleView: View {
                         print("Your location is unknown")
                     }
                     viewModel.addPeople(name: name, point: locationFetcher.lastKnownLocation!)
+//                    processedImage = nil
                     
-                
                     dismiss()
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)

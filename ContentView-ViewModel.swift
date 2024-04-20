@@ -46,6 +46,8 @@ extension ContentView{
                 let addNewPeople = People(id: UUID(), name: name, image: imageData, latitude: point.latitude, longitude: point.longitude)
                 peoples.append(addNewPeople)
                 savePeople()
+                
+                processedImage = nil
                 print("New person added successfully.")
             }
         }
